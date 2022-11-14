@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,11 +16,14 @@ namespace Cumulative1.Controllers
             return View();
         }
 
-        public ActionResult List()
+        public ActionResult List(string SearchKey)
         {
-            //Need data from article data controller
+            Debug.WriteLine("The user is trying to search for " + SearchKey);
+
+            //Need data from teacher data controller
             TeacherDataController MyController = new TeacherDataController();
-            IEnumerable<Teacher> Teachers = MyController.ListTeachers();
+            IEnumerable<Teacher> Teachers = MyController.ListTeachers(SearchKey);
+            Debug.WriteLine("I have accessed " + SearchKey);
             return View(Teachers);
         }
 

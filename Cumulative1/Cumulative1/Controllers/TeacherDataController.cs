@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Diagnostics;
 
 namespace Cumulative1.Controllers
 {
@@ -13,18 +14,39 @@ namespace Cumulative1.Controllers
     {
         private SchoolDbContext SchoolDb = new SchoolDbContext();
 
+        /// <summary>
+        /// Grabs teacher from database. If search key is included we will match teacher name to the search key
+        /// </summary>
+        /// <param name="SearchKey"></param>
+        /// <example>
+        /// GET api/teacherdata/listteachers - > {teacherid:1, teachername:"anthony ho", datehired:"2020-01-01",
+        /// employeenumber: T001, salary: $100
+        /// </example>
+        /// <returns>
+        /// {teacherid:1, teachername:"anthony ho", datehired:"2020-01-01",
+        /// employeenumber: T001, salary: $100
+        /// </returns>
+
         [HttpGet]
-        public IEnumerable<Teacher> ListTeachers()
+        [Route("api/teacherdata/listteachers/{SearchKey}")]
+        public IEnumerable<Teacher> ListTeachers(string SearchKey)
         {
             //Goal: Connect to database
             MySqlConnection Conn = SchoolDb.AccessDatabase();
 
             Conn.Open();
 
+            Debug.WriteLine("The search key is " + SearchKey);
+
             //Run an SQL command "SELECT * FROM teachers"
-            string query = "SELECT * FROM teachers";
+            string query = "SELECT * FROM teachers WHERE teacherfname OR teacherlname LIKE '%"+SearchKey+"%'";
             MySqlCommand cmd = Conn.CreateCommand();
             cmd.CommandText = query;
+            Debug.WriteLine("The query is: " + SearchKey);
+
+
+            cmd.Parameters.AddWithValue("@key", "%" + SearchKey + "%");
+            cmd.Prepare();
 
             MySqlDataReader ResultSet = cmd.ExecuteReader();
             List<Teacher> Teachers = new List<Teacher>();
@@ -33,7 +55,7 @@ namespace Cumulative1.Controllers
             {
                 int TeacherId = Convert.ToInt32(ResultSet["teacherid"]);
                 string TeacherFName = ResultSet["teacherfname"].ToString();
-                string TeacherLName = ResultSet["teacherfname"].ToString();
+                string TeacherLName = ResultSet["teacherlname"].ToString();
                 DateTime HireDate = Convert.ToDateTime(ResultSet["hiredate"]);
                 string EmployeeNumber = ResultSet["employeenumber"].ToString();
                 decimal Salary = Convert.ToDecimal(Convert.ToString(ResultSet["salary"]));
@@ -57,12 +79,17 @@ namespace Cumulative1.Controllers
             return Teachers;
         }
         /// <summary>
-        /// Grabs teacher from database
+        /// Grabs teacher from database. If search key is included we will match teacher name to the search key
         /// </summary>
         /// <param name="TeacherId"></param>
+        /// <example>
+        /// GET api/teacherdata/listteachers - > {teacherid:1, teachername:"anthony ho", datehired:"2020-01-01",
+        /// employeenumber: T001, salary: $100
+        /// </example>
         /// <returns>
         /// {teacherid:1, teachername:"anthony ho", datehired:"2020-01-01",
-        /// employeenumber: T001, salary: $100</returns>
+        /// employeenumber: T001, salary: $100
+        /// </returns>
 
         [HttpGet]
         [Route("api/teacherdata/findteacher/{teacherid}")]
@@ -78,6 +105,9 @@ namespace Cumulative1.Controllers
             string query = "SELECT * FROM teachers WHERE teacherid=" + TeacherId;
             MySqlCommand cmd = Conn.CreateCommand();
             cmd.CommandText = query;
+
+            cmd.Parameters.AddWithValue("@id", TeacherId);
+            cmd.Prepare();
 
             MySqlDataReader ResultSet = cmd.ExecuteReader();
 
