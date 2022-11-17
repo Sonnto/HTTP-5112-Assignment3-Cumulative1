@@ -39,7 +39,7 @@ namespace Cumulative1.Controllers
             Debug.WriteLine("The search key is " + SearchKey);
 
             //Run an SQL command "SELECT * FROM teachers"
-            string query = "SELECT * FROM teachers WHERE teacherfname OR teacherlname LIKE '%"+SearchKey+"%'";
+            string query = "SELECT * FROM teachers WHERE teacherfname LIKE @key OR teacherlname LIKE @key OR hiredate LIKE @key OR employeenumber LIKE @key OR salary LIKE @key";
             MySqlCommand cmd = Conn.CreateCommand();
             cmd.CommandText = query;
             Debug.WriteLine("The query is: " + SearchKey);
