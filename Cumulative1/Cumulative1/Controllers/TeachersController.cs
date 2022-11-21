@@ -8,6 +8,7 @@ using Cumulative1.Models;
 
 namespace Cumulative1.Controllers
 {
+
     public class TeachersController : Controller
     {
         // GET: /Teachers/List
@@ -27,7 +28,7 @@ namespace Cumulative1.Controllers
             return View(Teachers);
         }
 
-        //GET: /Teachers/Show/{teahcerid}
+        //GET: /Teachers/Show/{teacherid}
         public ActionResult Show(int id)
         {
             TeacherDataController MyController = new TeacherDataController();
@@ -35,5 +36,47 @@ namespace Cumulative1.Controllers
 
             return View(SelectedTeacher);
         }
+
+        //GET: /Teachers/New
+        public ActionResult New()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(string TeacherFName, string TeacherLName, int EmployeeNumber, DateTime HireDate, int Salary)
+        {
+            Teacher NewTeacher = new Teacher();
+            NewTeacher.TeacherFName = TeacherFName; 
+            NewTeacher.TeacherLName = TeacherLName;
+            NewTeacher.EmployeeNumber = EmployeeNumber.ToString();
+            NewTeacher.HireDate = HireDate;
+            NewTeacher.Salary = Salary;
+
+            TeacherDataController MyController = new TeacherDataController();
+            MyController.AddTeacher(NewTeacher);
+
+            Debug.WriteLine("Trying to create a new teacher with first and last name " + TeacherFName + TeacherLName);
+            return RedirectToAction("List");
+        }
+
+        //GET: /Teachers/DeleteConfirm/{id}
+        public ActionResult DeleteConfirm(int id)
+        {
+            //navigate to /Views/Teachers/DeleteConfirm.html
+            TeacherDataController MyController = new TeacherDataController();
+            Teacher NewTeacher = MyController.FindTeacher(id);
+            ///MyController.DeleteTeacher(id);
+            return View(NewTeacher);
+        }
+
+        [HttpPost]
+        public ActionResult Delete (int id)
+        {
+            TeacherDataController MyController = new TeacherDataController();
+            MyController.DeleteTeacher(id);
+            return RedirectToAction("List");
+        }
+
     }
 }

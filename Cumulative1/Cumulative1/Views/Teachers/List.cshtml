@@ -14,6 +14,8 @@
 
 <p>There are @Model.Count() teachers in the database system.</p>
 
+<a href="/Teachers/New" style="color:darkgreen"> Add New Teacher</a>
+
 @foreach (var Teacher in Model)
 {
     <h3><a href="/Teachers/Show/@Teacher.TeacherId">@Teacher.TeacherFName @Teacher.TeacherLName</a></h3>

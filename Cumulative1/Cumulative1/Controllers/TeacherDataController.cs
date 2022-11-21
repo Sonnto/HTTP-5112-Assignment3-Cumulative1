@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using System.Data.SqlClient;
 
 namespace Cumulative1.Controllers
 {
@@ -126,5 +128,74 @@ namespace Cumulative1.Controllers
 
             return SelectedTeacher;
         }
+
+        /// <summary>
+        /// Adds new teacher to the system.
+        /// </summary>
+        /// <param name="NewTeacher">Teacher Object</param>
+        /// <returns></returns>
+        /// <example>
+        /// api/TeacherData/AddTeacher
+        /// </example>
+        [HttpPost]
+        public void AddTeacher([FromBody]Teacher NewTeacher)
+        {
+            //Query
+            //INSERT into teachers (teacherfname, teacherlname, hiredate, employeenumber, salary) values (@fname, @lname, @hiredate, @employeenumber, @salary)
+            string query = "INSERT into teachers (teacherfname, teacherlname, hiredate, employeenumber, salary) VALUES (@fname, @lname, @hiredate, @employeenumber, @salary)";
+
+            MySqlConnection Conn = SchoolDb.AccessDatabase();
+
+            Conn.Open();
+
+
+            MySqlCommand cmd = Conn.CreateCommand();
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@fname", NewTeacher.TeacherFName);
+            cmd.Parameters.AddWithValue("@lname", NewTeacher.TeacherLName);
+            cmd.Parameters.AddWithValue("@hiredate", NewTeacher.HireDate);
+            cmd.Parameters.AddWithValue("@employeenumber", NewTeacher.EmployeeNumber);
+            cmd.Parameters.AddWithValue("@salary", NewTeacher.Salary);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+
+        }
+
+        /// <summary>
+        /// Method will delete a teacher from the database
+        /// </summary>
+        /// <param name="TeacherId">The teacher id primary key</param>
+        /// <returns></returns>
+        /// <example>
+        /// GET: api/teacherdata/deleteteacher/100
+        /// </example>
+
+        [HttpGet]
+        [Route("api/TeacherId/DeleteTeacher/{TeacherId}")]
+        public void DeleteTeacher(int TeacherId)
+        {
+            MySqlConnection Conn = SchoolDb.AccessDatabase();
+
+            Conn.Open();
+
+            //Query
+            //DELETE from teachers WHERE teacherid=@id
+            string query = "DELETE from teachers WHERE TeacherId=@Id";
+
+            MySqlCommand cmd = Conn.CreateCommand();
+            cmd.CommandText = query;
+
+            cmd.Parameters.AddWithValue("@id", TeacherId);
+
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+        }
+
     }
 }

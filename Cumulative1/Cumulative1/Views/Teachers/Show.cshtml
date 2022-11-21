@@ -4,10 +4,14 @@
     ViewBag.Title = "Show";
 }
 
+<a href="/Teachers/DeleteConfirm/@Model.TeacherId" style="color:red">Delete Teacher</a>
+
 <h2>@Model.TeacherFName @Model.TeacherLName</h2>
 <p>Teacher ID: @Model.TeacherId</p>
 <p>Employee #: @Model.EmployeeNumber</p>
 <p>Date Hired: @Model.HireDate</p>
 <p>Salary: $@Model.Salary</p>
+
+<a href="/Teachers/List">Back to List</a>
 
 
