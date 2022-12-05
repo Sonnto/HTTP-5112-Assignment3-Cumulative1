@@ -1,0 +1,34 @@
+﻿@model Cumulative1.Models.Teacher
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Teacher Record</h2>
+
+<a href="/Teachers/Show/@Model.TeacherId">Cancel edit, return to @Model.TeacherFName @Model.TeacherLName's Record Overview'</a>
+
+<form method="post" action="/Teachers/Update/@Model.TeacherId">
+    <div>
+        <label>First Name: </label>
+        <input type="text" name="TeacherFName" value="@Model.TeacherFName" />
+    </div>
+    <div>
+        <label>Last Name: </label>
+        <input type="text" name="TeacherLName" value="@Model.TeacherLName" />
+    </div>
+    <div>
+        <label>Employee Number: </label>
+        <input type="text" name="EmployeeNumber" value="@Model.EmployeeNumber" />
+    </div>
+    <div>
+        <label>Hire Date: </label>
+        <input type="date" name="HireDate" value="@Model.HireDate" />
+    </div>
+    <div>
+        <label>Salary: </label>
+        <input type="text" name="Salary" value="@Model.Salary" />
+    </div>
+    <div>
+        <input type="submit" value="Update" />
+    </div>
+</form>

@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using System.Data.SqlClient;
+using System.Web.UI.WebControls;
 
 namespace Cumulative1.Controllers
 {
@@ -41,7 +42,7 @@ namespace Cumulative1.Controllers
             Debug.WriteLine("The search key is " + SearchKey);
 
             //Run an SQL command "SELECT * FROM teachers"
-            string query = "SELECT * FROM teachers WHERE teacherfname LIKE @key OR teacherlname LIKE @key OR hiredate LIKE @key OR employeenumber LIKE @key OR salary LIKE @key";
+            string query = "SELECT * FROM teachers WHERE teacherfname LIKE @key OR teacherlname LIKE @key OR hiredate LIKE @key OR employeenumber LIKE @key OR salary LIKE @key ORDER BY teacherlname";
             MySqlCommand cmd = Conn.CreateCommand();
             cmd.CommandText = query;
             Debug.WriteLine("The query is: " + SearchKey);
@@ -58,16 +59,16 @@ namespace Cumulative1.Controllers
                 int TeacherId = Convert.ToInt32(ResultSet["teacherid"]);
                 string TeacherFName = ResultSet["teacherfname"].ToString();
                 string TeacherLName = ResultSet["teacherlname"].ToString();
-                DateTime HireDate = Convert.ToDateTime(ResultSet["hiredate"]);
                 string EmployeeNumber = ResultSet["employeenumber"].ToString();
+                DateTime HireDate = Convert.ToDateTime(ResultSet["hiredate"]);
                 decimal Salary = Convert.ToDecimal(Convert.ToString(ResultSet["salary"]));
 
                 Teacher NewTeacher = new Teacher();
                 NewTeacher.TeacherId = TeacherId;
                 NewTeacher.TeacherFName = TeacherFName;
                 NewTeacher.TeacherLName = TeacherLName;
-                NewTeacher.HireDate = HireDate;
                 NewTeacher.EmployeeNumber = EmployeeNumber;
+                NewTeacher.HireDate = HireDate;
                 NewTeacher.Salary = Salary;
 
                 Teachers.Add(NewTeacher);
@@ -119,8 +120,8 @@ namespace Cumulative1.Controllers
                 SelectedTeacher.TeacherId = Convert.ToInt32(ResultSet["teacherid"]);
                 SelectedTeacher.TeacherFName = ResultSet["teacherfname"].ToString();
                 SelectedTeacher.TeacherLName = ResultSet["teacherlname"].ToString();
-                SelectedTeacher.HireDate = Convert.ToDateTime(ResultSet["hiredate"]);
                 SelectedTeacher.EmployeeNumber = ResultSet["employeenumber"].ToString();
+                SelectedTeacher.HireDate = Convert.ToDateTime(ResultSet["hiredate"]);
                 SelectedTeacher.Salary = Convert.ToDecimal(Convert.ToString(ResultSet["salary"]));
             }
 
@@ -142,7 +143,7 @@ namespace Cumulative1.Controllers
         {
             //Query
             //INSERT into teachers (teacherfname, teacherlname, hiredate, employeenumber, salary) values (@fname, @lname, @hiredate, @employeenumber, @salary)
-            string query = "INSERT into teachers (teacherfname, teacherlname, hiredate, employeenumber, salary) VALUES (@fname, @lname, @hiredate, @employeenumber, @salary)";
+            string query = "INSERT into teachers (teacherfname, teacherlname, employeenumber, hiredate, salary) VALUES (@fname, @lname, @employeenumber, @hiredate, @salary)";
 
             MySqlConnection Conn = SchoolDb.AccessDatabase();
 
@@ -153,8 +154,8 @@ namespace Cumulative1.Controllers
             cmd.CommandText = query;
             cmd.Parameters.AddWithValue("@fname", NewTeacher.TeacherFName);
             cmd.Parameters.AddWithValue("@lname", NewTeacher.TeacherLName);
-            cmd.Parameters.AddWithValue("@hiredate", NewTeacher.HireDate);
             cmd.Parameters.AddWithValue("@employeenumber", NewTeacher.EmployeeNumber);
+            cmd.Parameters.AddWithValue("@hiredate", NewTeacher.HireDate);
             cmd.Parameters.AddWithValue("@salary", NewTeacher.Salary);
             cmd.Prepare();
 
@@ -195,6 +196,50 @@ namespace Cumulative1.Controllers
             cmd.ExecuteNonQuery();
 
             Conn.Close();
+        }
+        /// <summary>
+        /// Updates a teacher record in the system
+        /// </summary>
+        /// <param name="TeacherId"></param>
+        /// <param name="TeacherFName"></param>
+        /// <param name="TeacherLName"></param>
+        /// <param name="EmployeeNumber"></param>
+        /// <param name="HireDate"></param>
+        /// <param name="Salary"></param>
+        /// <example>
+        /// POST: /api/teacherdata/updateteacher/{teacherid}
+        /// REQUEST BODY / POST DATA
+        /// </example>
+        [HttpPost]
+        [Route("api/teacherdata/updateteacher/{teacherid}")]
+        public void UpdateTeacher(int TeacherId,[FromBody]Teacher UpdatedTeacher)
+        {
+            Debug.WriteLine("Teacher ID is " + TeacherId);
+            Debug.WriteLine("Teacher First Name is " + UpdatedTeacher.TeacherFName);
+            Debug.WriteLine("Teacher Last Name is " + UpdatedTeacher.TeacherLName);
+            Debug.WriteLine("Teacher Employee Number is " + UpdatedTeacher.EmployeeNumber);
+            Debug.WriteLine("Teacher Hire Date is " + UpdatedTeacher.HireDate);
+            Debug.WriteLine("Teacher Salary is " + UpdatedTeacher.Salary);
+
+            //Update the Teacher Info Records
+            string query = "UPDATE teachers SET TeacherFName=@fname, TeacherLName=@lname, EmployeeNumber=@employeenumber, HireDate=@hiredate, Salary=@salary WHERE TeacherId=@Id";
+            MySqlConnection Conn = SchoolDb.AccessDatabase();
+            Conn.Open();
+
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@fname", UpdatedTeacher.TeacherFName);
+            cmd.Parameters.AddWithValue("@lname", UpdatedTeacher.TeacherLName);
+            cmd.Parameters.AddWithValue("@employeenumber", UpdatedTeacher.EmployeeNumber);
+            cmd.Parameters.AddWithValue("@hiredate", UpdatedTeacher.HireDate);
+            cmd.Parameters.AddWithValue("@salary", UpdatedTeacher.Salary);
+            cmd.Parameters.AddWithValue("@id", TeacherId);
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+
         }
 
     }

@@ -10,8 +10,8 @@ namespace Cumulative1.Models
         public int TeacherId;
         public string TeacherFName;
         public string TeacherLName;
-        public DateTime HireDate;
         public string EmployeeNumber;
+        public DateTime HireDate;
         public decimal Salary;
     }
 }

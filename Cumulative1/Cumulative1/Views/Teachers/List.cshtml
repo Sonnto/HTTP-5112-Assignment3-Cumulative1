@@ -5,7 +5,7 @@
     ViewBag.Title = "List";
 }
 
-<h2>List all teachers</h2>
+<h2>List of All Teacher Records</h2>
 
 <form action="/Teachers/List" method="get">
     <input type="text" name="SearchKey" />
@@ -14,7 +14,7 @@
 
 <p>There are @Model.Count() teachers in the database system.</p>
 
-<a href="/Teachers/New" style="color:darkgreen"> Add New Teacher</a>
+<a href="/Teachers/New" style="color:darkgreen">Add New Teacher Record</a>
 
 @foreach (var Teacher in Model)
 {

@@ -4,11 +4,15 @@
     ViewBag.Title = "Show";
 }
 
-<a href="/Teachers/DeleteConfirm/@Model.TeacherId" style="color:red">Delete Teacher</a>
+<h2>Teacher Records Overview</h2>
+
+<a href="/Teachers/DeleteConfirm/@Model.TeacherId" style="color:red">Delete Teacher Record</a>
+&nbsp;&nbsp;
+<a href="/Teachers/Edit/@Model.TeacherId">Edit Information Record</a>
 
 <h2>@Model.TeacherFName @Model.TeacherLName</h2>
 <p>Teacher ID: @Model.TeacherId</p>
-<p>Employee #: @Model.EmployeeNumber</p>
+<p>Employee Number: @Model.EmployeeNumber</p>
 <p>Date Hired: @Model.HireDate</p>
 <p>Salary: $@Model.Salary</p>
 
