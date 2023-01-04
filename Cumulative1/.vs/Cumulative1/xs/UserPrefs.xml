@@ -1,17 +1,27 @@
 ﻿<Properties StartupConfiguration="{0C57DE11-CED7-435F-AB97-EA4B5772E537}|">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Cumulative1 PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.Cumulative1 PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Cumulative1/Views/Teachers/List.cshtml">
+    <Files>
+      <File FileName="Cumulative1/Controllers/TeacherDataController.cs" Line="1" Column="1" />
+      <File FileName="Cumulative1/Views/Teachers/List.cshtml" Line="1" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Cumulative1" expanded="True">
-            <Node name="Cumulative1" selected="True" />
+            <Node name="Cumulative1" expanded="True">
+              <Node name="Views" expanded="True">
+                <Node name="Teachers" expanded="True">
+                  <Node name="List.cshtml" selected="True" />
+                </Node>
+              </Node>
+            </Node>
           </Node>
         </State>
       </Pad>
